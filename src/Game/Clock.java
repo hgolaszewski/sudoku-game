@@ -10,29 +10,41 @@ import javax.swing.JLabel;
 
 public class Clock {
 
-    public Timer timer;
-    private JLabel label;
-    public int nSeconds;
+    private final Timer timer;
+    private final JLabel timeLabel;
+    private int seconds;
 
     public Clock(JLabel label) {
+        timeLabel = label;
+        seconds = 0;
         timer = new Timer();
-        nSeconds = 0;
-        this.label = label;
-        timer.schedule(new UpdateUITask(), 0, 1000);
+        timer.schedule(new UpdateUITask(), 1000, 1000);
     }
 
     private class UpdateUITask extends TimerTask {
+
         @Override
         public void run() {
             EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    nSeconds += 1000;
-                    SimpleDateFormat formatter = new SimpleDateFormat("mm:ss", Locale.getDefault());
-                    label.setText("CZAS: " + String.valueOf(formatter.format(new Date(nSeconds))));
+                    seconds += 1000;
+                    SimpleDateFormat dateFormatter = new SimpleDateFormat("mm:ss", Locale.getDefault());
+                    timeLabel.setText("CZAS: " + String.valueOf(dateFormatter.format(new Date(seconds))));
                 }
             });
         }
     }
 
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public int getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(int newSeconds) {
+        seconds = newSeconds;
+    }
 }
